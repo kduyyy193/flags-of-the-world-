@@ -127,13 +127,14 @@ const Quiz: React.FC<QuizProps> = ({
         <>
           <h3 className="text-center">Which country&apos;s flag is this?</h3>
           <div className="mb-2 mt-4 mx-auto w-fit min-h-[150px]">
-            <Image
-              src={`/images/${currentQuestion.img}`.toString()}
-              alt={currentQuestion.name}
-              width={200}
-              height={100}
-              className="shadow shadow-amber-50"
-            />
+            <div className="shadow shadow-amber-50">
+              <Image
+                src={`/images/${currentQuestion.img}`.toString()}
+                alt={currentQuestion.name}
+                width={200}
+                height={100}
+              />
+            </div>
           </div>
           <div className="mt-8">
             <div className="flex flex-wrap gap-4">
