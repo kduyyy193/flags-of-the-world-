@@ -2,7 +2,7 @@
 import { useState, useEffect, useMemo } from "react";
 import flags, { Flag } from "../../../data/flags";
 import Image from "next/image";
-import { getRandomIndex } from "@/utils";
+import { getRandomElements, getRandomIndex } from "@/utils";
 
 type QuizProps = {
   totalQuestions?: number;
@@ -23,11 +23,13 @@ const Quiz: React.FC<QuizProps> = ({
   const [quizFinished, setQuizFinished] = useState(false); // Track if quiz is finished
   const [usedQuestions, setUsedQuestions] = useState<Flag[]>([]); // Track if quiz is finished
 
-  useEffect(() => {
-    const filteredFlags = continent
+  const filteredFlags = useMemo(() => {
+    return continent
       ? flags.filter((flag) => flag.continent === continent)
       : flags;
+  }, [[flags, continent]]);
 
+  useEffect(() => {
     // Randomize questions
     const selectedQuestions: Flag[] = [];
     for (let i = 0; i < totalQuestions; i++) {
@@ -39,10 +41,10 @@ const Quiz: React.FC<QuizProps> = ({
   }, [continent, totalQuestions]);
 
   const handleAnswer = (answer: string) => {
-    setSelectedAnswer((prev) => [...prev, answer]);
-    if (answer !== correctAnswer) {
+    if (selectedAnswer?.length) {
       return;
     }
+    setSelectedAnswer((prev) => [...prev, answer]);
     if (answer === correctAnswer) {
       setScore((prev) => prev + 1); // Increment score if correct answer
       setUsedQuestions((prev) => [...prev, currentQuestion]);
@@ -72,16 +74,16 @@ const Quiz: React.FC<QuizProps> = ({
 
   const answerOptionSuffled = useMemo(() => {
     if (!currentQuestion) return [];
+    const wrongOptions = getRandomElements(
+      filteredFlags.filter((f) => f.id !== currentQuestion.id),
+      3
+    );
     const answerOptions = [
       currentQuestion.name,
-      ...flags
-        .filter((f) => f.id !== currentQuestion.id)
-        .slice(0, 3)
-        .map((f) => f.name),
+      ...wrongOptions.map((f) => f.name),
     ];
     return answerOptions.sort(() => Math.random() - 0.5);
   }, [currentQuestion]);
-  // Shuffle answer options
 
   // Restart quiz logic
   const restartQuiz = () => {
@@ -124,12 +126,13 @@ const Quiz: React.FC<QuizProps> = ({
       ) : (
         <>
           <h3 className="text-center">Which country&apos;s flag is this?</h3>
-          <div className="mb-2 mt-4 mx-auto w-fit">
+          <div className="mb-2 mt-4 mx-auto w-fit min-h-[150px]">
             <Image
               src={`/images/${currentQuestion.img}`.toString()}
               alt={currentQuestion.name}
               width={200}
               height={100}
+              className="shadow shadow-amber-50"
             />
           </div>
           <div className="mt-8">
@@ -145,7 +148,7 @@ const Quiz: React.FC<QuizProps> = ({
                         ? "green"
                         : "red"
                       : "",
-                    fontSize: answer.length >= 20 ? 12 : 16,
+                    fontSize: answer.length >= 18 ? 12 : 16,
                   }}
                 >
                   {answer}
