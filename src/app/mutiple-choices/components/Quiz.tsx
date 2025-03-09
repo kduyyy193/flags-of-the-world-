@@ -21,7 +21,6 @@ const Quiz: React.FC<QuizProps> = ({
   const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
   const [score, setScore] = useState(0); // Added score state
   const [quizFinished, setQuizFinished] = useState(false); // Track if quiz is finished
-  const [usedQuestions, setUsedQuestions] = useState<Flag[]>([]); // Track if quiz is finished
 
   const filteredFlags = useMemo(() => {
     return continent
@@ -47,7 +46,6 @@ const Quiz: React.FC<QuizProps> = ({
     setSelectedAnswer((prev) => [...prev, answer]);
     if (answer === correctAnswer) {
       setScore((prev) => prev + 1); // Increment score if correct answer
-      setUsedQuestions((prev) => [...prev, currentQuestion]);
     }
 
     // Delay for 0.5 seconds before moving to the next question
