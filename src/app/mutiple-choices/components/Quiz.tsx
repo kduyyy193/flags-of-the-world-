@@ -26,7 +26,7 @@ const Quiz: React.FC<QuizProps> = ({
     return continent
       ? flags.filter((flag) => flag.continent === continent)
       : flags;
-  }, [[flags, continent]]);
+  }, [[...flags, continent]]);
 
   useEffect(() => {
     // Randomize questions
@@ -37,7 +37,7 @@ const Quiz: React.FC<QuizProps> = ({
     }
 
     setQuestions(selectedQuestions);
-  }, [continent, totalQuestions]);
+  }, [continent, totalQuestions, ...filteredFlags]);
 
   const handleAnswer = (answer: string) => {
     if (selectedAnswer?.length) {
@@ -81,7 +81,7 @@ const Quiz: React.FC<QuizProps> = ({
       ...wrongOptions.map((f) => f.name),
     ];
     return answerOptions.sort(() => Math.random() - 0.5);
-  }, [currentQuestion]);
+  }, [currentQuestion, ...filteredFlags]);
 
   // Restart quiz logic
   const restartQuiz = () => {

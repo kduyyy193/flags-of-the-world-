@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col">
       <div className="flex items-center ml-2">
         <div className="flex items-center w-full">
           <Link href="/">
@@ -26,7 +26,7 @@ export default function RootLayout({
           </div>
         </div>
       </div>
-      {children}
+      <div className="grow">{children}</div>
     </div>
   );
 }

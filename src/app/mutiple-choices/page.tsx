@@ -70,7 +70,7 @@ const Page = () => {
   };
 
   return (
-    <div className="grow flex flex-col">
+    <div className="min-h-[calc(100vh-40px)]">
       <div className="p-4 h-full flex flex-col">
         {screen === "config" && (
           <>
@@ -118,7 +118,7 @@ const Page = () => {
             <div className="w-full flex justify-center grow">
               <button
                 onClick={handleReset}
-                className="mt-auto px-8 py-2 border rounded-lg bg-white text-black"
+                className="mt-auto px-8 py-2 border rounded-lg bg-white text-black min-w-[123px]"
               >
                 Reset
               </button>
